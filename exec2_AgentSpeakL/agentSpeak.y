@@ -51,10 +51,10 @@ agent: beliefs plans
 
 beliefs: beliefs belief 
         | /* empty  */ 
-        | error
         ;
 
 belief: predicate '.'
+        | error '.' {yyerrok;}/* error recovery */ 
         ;
 
 predicate: T_ATOM '(' terms ')'
@@ -65,7 +65,8 @@ plans: plans plan
         ;
 
 plan: triggering_event ':' context "<-" body '.'
-    ;
+        | error '.' {yyerrok;}/* error recovery */ 
+        ;
 
 triggering_event: '+' predicate 
         | '-' predicate
@@ -148,6 +149,6 @@ int main (int argc, char ** argv)
     if (yynerrs == 0)
         printf("Syntax OK! \n");
     else
-        printf("Total Syntax Errors found %d \n",yynerrs);
+        printf("There were %d errors in code. Failure! \n",yynerrs);
 
 }
