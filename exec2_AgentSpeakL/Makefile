@@ -1,6 +1,6 @@
 .PHONY: default
 
-FILES_TO_DELETE = agentSpeak.tab.c agentSpeak.lex.c agentSpeak.output agentSpeak
+FILES_TO_DELETE = agentSpeak.tab.c agentSpeak.lex.c agentSpeak
 
 
 default: agentSpeak
