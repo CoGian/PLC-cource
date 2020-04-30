@@ -36,11 +36,10 @@ int yyerror (const char * msg);
 %token T_TRUE "true"
 %token T_NOT "not"
 
-%left '+'
-%left '-'
-%left ','
+%token '+'
+%token '-'
+%token ','
 
-%nonassoc T_ASIGN
 
 
 
@@ -54,7 +53,6 @@ beliefs: beliefs belief
         ;
 
 belief: predicate '.'
-        | error '.' {yyerrok;}/* error recovery */ 
         ;
 
 predicate: T_ATOM '(' terms ')'
@@ -64,8 +62,8 @@ plans: plans plan
         | /* empty  */ 
         ;
 
-plan: triggering_event ':' context "<-" body '.'
-        | error '.' {yyerrok;}/* error recovery */ 
+plan: triggering_event ':' context T_ASIGN body '.'
+        | error '.' {yyerrok;}/* error recovery */  
         ;
 
 triggering_event: '+' predicate 
