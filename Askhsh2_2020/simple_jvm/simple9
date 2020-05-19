@@ -1,0 +1,6 @@
+start simple9
+(y -1)
+(print y)
+(y (12 5 max))
+(print y)
+end

@@ -1,0 +1,8 @@
+start simple10
+(y -1)
+(z -2.0)
+(y (12 12 5 max + 10 (int z abs) min +))
+(print y)
+(z (12.0 z -1.0 min +))
+(print z)
+end
