@@ -17,7 +17,7 @@ cleanWin:
 
 clean-unix:
 	rm -f jvmSimplex.c jvmSimp.tab.h
-	rm -f jvmSimp.tab.c jvmSimp jvmSimp.exe jvmSimp.output
+	rm -f jvmSimp.tab.c jvmSimp jvmSimp.exe 
 
 clean-compilation-files:
 	rm -f simple*.j simple*.class

@@ -22,7 +22,8 @@ typedef ST_ENTRY *ST_TABLE;
 /* definition required by the Lib (sglib.h ) for the linked lists used in the symbol table.  */
 #define ST_COMPARATOR(e1,e2) (strcmp(e1->varname,e2->varname))
 
-
+/* Error Messages Macros*/
+#define ERR_VAR_MISSING(VAR,LINE) printf("Variable %s NOT declared, n line %d.",VAR,LINE); yyerror("Variable Declation fault")
 
 /* Functions Needed*/
 

@@ -34,6 +34,8 @@ int yyerror(const char *);
 %token <lexical> T_real
 %token '('
 %token ')'
+%token '+'
+%token '*'
 %token <lexical> T_id
 %token T_start "start"
 %token T_end "end"
@@ -41,9 +43,8 @@ int yyerror(const char *);
 %token T_type_integer "int"
 %token T_type_float "float"
 
-
+%right  T_incr "++"
 %type<se> expr
-
 
 %%
 
@@ -62,7 +63,7 @@ stmt:  asmt	{/* nothing */}
 	| printcmd {/* nothing */}
 	;
 
-printcmd: "print" expr  {
+printcmd: "print"  expr   { 
 			   	fprintf(yyout,"getstatic java/lang/System/out Ljava/io/PrintStream;\n");
 			    fprintf(yyout,"swap\n");
 				  fprintf(yyout,"invokevirtual java/io/PrintStream/println(%s)V\n", TYPEDESCRIPTOR($2.type) ) ;
@@ -70,19 +71,42 @@ printcmd: "print" expr  {
 		   	;
 
 asmt: T_id expr
-    {  /* ADD CODE HERE */
-		
-		}
-	;
+    { 
+      int garbage = addvar($1, $2.type) ;  /* function addvar returns unused info:  0 if var is already in Table otherwise 1  */
+      typeDefinition(lookup_type($1), $2.type);
+      fprintf(yyout,"%sstore %d\n",typePrefix($2.type),lookup_position($1));
+    }
+	  ;
 
 
 expr:   T_num  {$$.type = type_integer; fprintf(yyout,"sipush %s\n",$1);}
 	| T_real 	  {$$.type = type_real; fprintf(yyout,"ldc %s\n",$1);}
-	| T_id 	 { /* ADD CODE HERE */  }
-  	| expr expr '+' {$$.type = typeDefinition($1.type, $2.type);
-	                 fprintf(yyout,"%sadd \n",typePrefix($$.type));}
-	
-  ;
+	| T_id 	 { 
+      if (!($$.type = lookup_type($1))) {ERR_VAR_MISSING($1,yylineno);}
+			fprintf(yyout,"%sload %d\n",typePrefix($$.type),lookup_position($1));
+    }
+  | '(' expr ')' { $$.type = $2.type ; }
+  | expr expr '+' {
+    $$.type = typeDefinition($1.type, $2.type);
+	  fprintf(yyout,"%sadd \n",typePrefix($$.type));
+    }
+  | expr expr '*'{
+    $$.type = typeDefinition($1.type, $2.type);
+	  fprintf(yyout,"%smul \n",typePrefix($$.type));
+  }
+  | T_incr T_id {
+    if (!($$.type = lookup_type($2))) {ERR_VAR_MISSING($2,yylineno);}
+    typeDefinition(type_integer,lookup_type($2)) ; /* check if T_id is integer */ 
+    fprintf(yyout,"iinc %d 1\n",lookup_position($2));
+    fprintf(yyout,"iload %d\n",lookup_position($2));
+    }
+  | T_id T_incr { 
+     if (!($$.type = lookup_type($1))) {ERR_VAR_MISSING($1,yylineno);}
+    typeDefinition(type_integer,lookup_type($1)) ; /* check if T_id is integer */ 
+    fprintf(yyout,"iload %d\n",lookup_position($1));
+    fprintf(yyout,"iinc %d 1\n",lookup_position($1));
+    }
+	;
 
 %%
 
