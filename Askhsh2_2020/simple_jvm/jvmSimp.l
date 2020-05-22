@@ -22,13 +22,13 @@ newline \n|\x0A|\x0D\x0A
 "print" {return T_print;}
 "int" {return T_type_integer;}
 "float" {return T_type_float;}
-"++" {return T_incr;}
 "+" {return '+';}
 "-"  {return '-';}
 "*" {return '*';}
 "/" {return '/';}
 "(" {return '(';}
 ")" {return ')';}
+"++" {return T_incr;}
 
 
 {D}+ {yylval.lexical = strdup(yytext);  return T_num;}

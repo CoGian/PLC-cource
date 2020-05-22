@@ -382,9 +382,9 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[44] =
     {   0,
-        0,    0,   20,   18,   17,   16,   18,   11,   12,    9,
-        7,    8,   10,   13,   15,   15,   15,   15,   15,   15,
-       16,    6,   14,   13,   15,   15,   15,   15,   15,   15,
+        0,    0,   20,   18,   17,   16,   18,   10,   11,    8,
+        6,    7,    9,   13,   15,   15,   15,   15,   15,   15,
+       16,   12,   14,   13,   15,   15,   15,   15,   15,   15,
        14,    2,   15,    4,   15,   15,   15,   15,   15,    5,
         3,    1,    0
     } ;
@@ -815,37 +815,37 @@ YY_RULE_SETUP
 case 6:
 YY_RULE_SETUP
 #line 25 "jvmSimp.l"
-{return T_incr;}
+{return '+';}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 26 "jvmSimp.l"
-{return '+';}
+{return '-';}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 27 "jvmSimp.l"
-{return '-';}
+{return '*';}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 28 "jvmSimp.l"
-{return '*';}
+{return '/';}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 29 "jvmSimp.l"
-{return '/';}
+{return '(';}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 30 "jvmSimp.l"
-{return '(';}
+{return ')';}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 31 "jvmSimp.l"
-{return ')';}
+{return T_incr;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
