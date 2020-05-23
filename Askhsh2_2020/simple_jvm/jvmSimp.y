@@ -34,8 +34,6 @@ int yyerror(const char *);
 %token <lexical> T_real
 %token '('
 %token ')'
-%token '+'
-%token '*'
 %token <lexical> T_id
 %token T_start "start"
 %token T_end "end"
@@ -43,8 +41,11 @@ int yyerror(const char *);
 %token T_type_integer "int"
 %token T_type_float "float"
 
+%token '+'
+%token '*'
 %token T_incr "++"
-
+%token T_abs "abs"
+%token '-'
 %type<se> expr
 %type<se> unary_expression
 %%
@@ -71,8 +72,7 @@ printcmd: "print"  expr   {
 				}
 		   	;
 
-asmt: T_id expr
-    { 
+asmt: T_id expr{ 
       int garbage = addvar($1, $2.type) ;  /* function addvar returns unused info:  0 if var is already in Table otherwise 1  */
       typeDefinition(lookup_type($1), $2.type);
       fprintf(yyout,"%sstore %d\n",typePrefix($2.type),lookup_position($1));
@@ -110,14 +110,28 @@ expr:   T_num  {$$.type = type_integer; fprintf(yyout,"sipush %s\n",$1);}
   }
   | unary_expression {$$.type = $1.type;}
   | '(' T_type_integer expr ')' {
-    if ( $3.type == type_integer ){WRN_VAL_TYPE("int",yylineno);}
-    else if($3.type != type_real){yyerror("Type missmatch.");}
-      
-    $3.type = type_integer ; 
-    $$.type = $3.type ;
-    fprintf(yyout,"%s2i\n",typePrefix($3.type));
+    if ( $3.type == type_integer ){$$.type = $3.type;WRN_VAL_TYPE("int",yylineno);} /*check for warning */ 
+    else if($3.type == type_real){
+      $3.type = type_integer ; 
+      $$.type = $3.type ;
+      fprintf(yyout,"%s2i\n",typePrefix(type_real));
+    }else  {yyerror("Type missmatch.");}
   }
-  
+  | '(' T_type_float expr ')' {
+    if ( $3.type == type_real ){$$.type = $3.type;WRN_VAL_TYPE("real",yylineno);} /*check for warning */ 
+    else if($3.type == type_integer){
+      $3.type = type_real ; 
+      $$.type = $3.type ;
+      fprintf(yyout,"%s2f\n",typePrefix(type_integer));
+    }else {yyerror("Type missmatch.");}     
+  }
+  | '-' T_num { $$.type = type_integer; fprintf(yyout,"sipush -%s\n",$2);/* rule for negative integers */} 
+  | '-' T_real {$$.type = type_real; fprintf(yyout,"ldc -%s\n",$2); /* rule for negative reals */} 
+  | expr T_abs {
+    $$.type = $1.type; 
+    fprintf(yyout,"invokestatic java/lang/Math/abs(%s)%s\n", TYPEDESCRIPTOR($1.type),TYPEDESCRIPTOR($1.type)) ;
+  }
+  ;
 
 
   

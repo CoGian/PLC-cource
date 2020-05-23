@@ -28,8 +28,9 @@ newline \n|\x0A|\x0D\x0A
 "/" {return '/';}
 "(" {return '(';}
 ")" {return ')';}
-"++" {return T_incr;}
 
+"++" {return T_incr;}
+"abs" {return T_abs;}
 
 {D}+ {yylval.lexical = strdup(yytext);  return T_num;}
 {FLOAT} {yylval.lexical = strdup(yytext); return T_real;}
