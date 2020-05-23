@@ -43,7 +43,7 @@ int yyerror(const char *);
 %token T_type_integer "int"
 %token T_type_float "float"
 
-%token  T_incr "++"
+%token T_incr "++"
 
 %type<se> expr
 %type<se> unary_expression
@@ -79,17 +79,17 @@ asmt: T_id expr
     }
 	  ;
 
-unary_expression :  "++" T_id{
-    if (!($$.type = lookup_type($2))) {ERR_VAR_MISSING($2,yylineno);}
-    typeDefinition(type_integer,lookup_type($2)) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iinc %d 1\n",lookup_position($2));
-    fprintf(yyout,"iload %d\n",lookup_position($2));
+unary_expression : '(' T_incr T_id ')'{
+    if (!($$.type = lookup_type($3))) {ERR_VAR_MISSING($3,yylineno);}
+    typeDefinition(type_integer,lookup_type($3)) ; /* check if T_id is integer */ 
+    fprintf(yyout,"iinc %d 1\n",lookup_position($3));
+    fprintf(yyout,"iload %d\n",lookup_position($3));
     }
-  | T_id "++" { 
-     if (!($$.type = lookup_type($1))) {ERR_VAR_MISSING($1,yylineno);}
-    typeDefinition(type_integer,lookup_type($1)) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iload %d\n",lookup_position($1));
-    fprintf(yyout,"iinc %d 1\n",lookup_position($1));
+  | '(' T_id T_incr ')'{ 
+     if (!($$.type = lookup_type($2))) {ERR_VAR_MISSING($2,yylineno);}
+    typeDefinition(type_integer,lookup_type($2)) ; /* check if T_id is integer */ 
+    fprintf(yyout,"iload %d\n",lookup_position($2));
+    fprintf(yyout,"iinc %d 1\n",lookup_position($2));
     }
 	;
 
@@ -109,6 +109,15 @@ expr:   T_num  {$$.type = type_integer; fprintf(yyout,"sipush %s\n",$1);}
 	  fprintf(yyout,"%smul \n",typePrefix($$.type));
   }
   | unary_expression {$$.type = $1.type;}
+  | '(' T_type_integer expr ')' {
+    if ( $3.type == type_integer ){WRN_VAL_TYPE("int",yylineno);}
+    else if($3.type != type_real){yyerror("Type missmatch.");}
+      
+    $3.type = type_integer ; 
+    $$.type = $3.type ;
+    fprintf(yyout,"%s2i\n",typePrefix($3.type));
+  }
+  
 
 
   

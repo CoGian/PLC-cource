@@ -1,10 +1,6 @@
 Terminals unused in grammar
 
-   "int"
    "float"
-
-
-State 19 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -26,8 +22,8 @@ Grammar
 
     9 asmt: T_id expr
 
-   10 unary_expression: "++" T_id
-   11                 | T_id "++"
+   10 unary_expression: '(' "++" T_id ')'
+   11                 | '(' T_id "++" ')'
 
    12 expr: T_num
    13     | T_real
@@ -36,13 +32,14 @@ Grammar
    16     | expr expr '+'
    17     | expr expr '*'
    18     | unary_expression
+   19     | '(' "int" expr ')'
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 3 4 5 15
-')' (41) 3 4 5 15
+'(' (40) 3 4 5 10 11 15 19
+')' (41) 3 4 5 10 11 15 19
 '*' (42) 17
 '+' (43) 16
 error (256) 5
@@ -52,7 +49,7 @@ T_id (260) 2 9 10 11 14
 "start" (261) 2
 "end" (262) 2
 "print" (263) 8
-"int" (264)
+"int" (264) 19
 "float" (265)
 "++" (266) 10 11
 
@@ -76,7 +73,7 @@ asmt (22)
 unary_expression (23)
     on left: 10 11, on right: 18
 expr (24)
-    on left: 12 13 14 15 16 17 18, on right: 8 9 15 16 17
+    on left: 12 13 14 15 16 17 18 19, on right: 8 9 15 16 17 19
 
 
 State 0
@@ -164,10 +161,9 @@ State 9
     T_real  shift, and go to state 17
     '('     shift, and go to state 18
     T_id    shift, and go to state 19
-    "++"    shift, and go to state 20
 
-    unary_expression  go to state 21
-    expr              go to state 22
+    unary_expression  go to state 20
+    expr              go to state 21
 
 
 State 10
@@ -178,10 +174,9 @@ State 10
     T_real  shift, and go to state 17
     '('     shift, and go to state 18
     T_id    shift, and go to state 19
-    "++"    shift, and go to state 20
 
-    unary_expression  go to state 21
-    expr              go to state 23
+    unary_expression  go to state 20
+    expr              go to state 22
 
 
 State 11
@@ -189,7 +184,7 @@ State 11
     3 stmts: '(' stmt . ')'
     4      | '(' stmt . ')' stmts
 
-    ')'  shift, and go to state 24
+    ')'  shift, and go to state 23
 
 
 State 12
@@ -219,7 +214,7 @@ State 15
 
     '('  shift, and go to state 6
 
-    stmts  go to state 25
+    stmts  go to state 24
 
 
 State 16
@@ -238,44 +233,37 @@ State 17
 
 State 18
 
+   10 unary_expression: '(' . "++" T_id ')'
+   11                 | '(' . T_id "++" ')'
    15 expr: '(' . expr ')'
+   19     | '(' . "int" expr ')'
 
     T_num   shift, and go to state 16
     T_real  shift, and go to state 17
     '('     shift, and go to state 18
-    T_id    shift, and go to state 19
-    "++"    shift, and go to state 20
+    T_id    shift, and go to state 25
+    "int"   shift, and go to state 26
+    "++"    shift, and go to state 27
 
-    unary_expression  go to state 21
-    expr              go to state 26
+    unary_expression  go to state 20
+    expr              go to state 28
 
 
 State 19
 
-   11 unary_expression: T_id . "++"
    14 expr: T_id .
 
-    "++"  shift, and go to state 27
-
-    "++"      [reduce using rule 14 (expr)]
     $default  reduce using rule 14 (expr)
 
 
 State 20
-
-   10 unary_expression: "++" . T_id
-
-    T_id  shift, and go to state 28
-
-
-State 21
 
    18 expr: unary_expression .
 
     $default  reduce using rule 18 (expr)
 
 
-State 22
+State 21
 
     9 asmt: T_id expr .
    16 expr: expr . expr '+'
@@ -285,15 +273,14 @@ State 22
     T_real  shift, and go to state 17
     '('     shift, and go to state 18
     T_id    shift, and go to state 19
-    "++"    shift, and go to state 20
 
     $default  reduce using rule 9 (asmt)
 
-    unary_expression  go to state 21
+    unary_expression  go to state 20
     expr              go to state 29
 
 
-State 23
+State 22
 
     8 printcmd: "print" expr .
    16 expr: expr . expr '+'
@@ -303,15 +290,14 @@ State 23
     T_real  shift, and go to state 17
     '('     shift, and go to state 18
     T_id    shift, and go to state 19
-    "++"    shift, and go to state 20
 
     $default  reduce using rule 8 (printcmd)
 
-    unary_expression  go to state 21
+    unary_expression  go to state 20
     expr              go to state 29
 
 
-State 24
+State 23
 
     3 stmts: '(' stmt ')' .
     4      | '(' stmt ')' . stmts
@@ -323,14 +309,44 @@ State 24
     stmts  go to state 30
 
 
-State 25
+State 24
 
     5 stmts: '(' error ')' stmts .
 
     $default  reduce using rule 5 (stmts)
 
 
+State 25
+
+   11 unary_expression: '(' T_id . "++" ')'
+   14 expr: T_id .
+
+    "++"  shift, and go to state 31
+
+    $default  reduce using rule 14 (expr)
+
+
 State 26
+
+   19 expr: '(' "int" . expr ')'
+
+    T_num   shift, and go to state 16
+    T_real  shift, and go to state 17
+    '('     shift, and go to state 18
+    T_id    shift, and go to state 19
+
+    unary_expression  go to state 20
+    expr              go to state 32
+
+
+State 27
+
+   10 unary_expression: '(' "++" . T_id ')'
+
+    T_id  shift, and go to state 33
+
+
+State 28
 
    15 expr: '(' expr . ')'
    16     | expr . expr '+'
@@ -339,26 +355,11 @@ State 26
     T_num   shift, and go to state 16
     T_real  shift, and go to state 17
     '('     shift, and go to state 18
-    ')'     shift, and go to state 31
+    ')'     shift, and go to state 34
     T_id    shift, and go to state 19
-    "++"    shift, and go to state 20
 
-    unary_expression  go to state 21
+    unary_expression  go to state 20
     expr              go to state 29
-
-
-State 27
-
-   11 unary_expression: T_id "++" .
-
-    $default  reduce using rule 11 (unary_expression)
-
-
-State 28
-
-   10 unary_expression: "++" T_id .
-
-    $default  reduce using rule 10 (unary_expression)
 
 
 State 29
@@ -371,12 +372,11 @@ State 29
     T_num   shift, and go to state 16
     T_real  shift, and go to state 17
     '('     shift, and go to state 18
-    '+'     shift, and go to state 32
-    '*'     shift, and go to state 33
+    '+'     shift, and go to state 35
+    '*'     shift, and go to state 36
     T_id    shift, and go to state 19
-    "++"    shift, and go to state 20
 
-    unary_expression  go to state 21
+    unary_expression  go to state 20
     expr              go to state 29
 
 
@@ -389,20 +389,71 @@ State 30
 
 State 31
 
+   11 unary_expression: '(' T_id "++" . ')'
+
+    ')'  shift, and go to state 37
+
+
+State 32
+
+   16 expr: expr . expr '+'
+   17     | expr . expr '*'
+   19     | '(' "int" expr . ')'
+
+    T_num   shift, and go to state 16
+    T_real  shift, and go to state 17
+    '('     shift, and go to state 18
+    ')'     shift, and go to state 38
+    T_id    shift, and go to state 19
+
+    unary_expression  go to state 20
+    expr              go to state 29
+
+
+State 33
+
+   10 unary_expression: '(' "++" T_id . ')'
+
+    ')'  shift, and go to state 39
+
+
+State 34
+
    15 expr: '(' expr ')' .
 
     $default  reduce using rule 15 (expr)
 
 
-State 32
+State 35
 
    16 expr: expr expr '+' .
 
     $default  reduce using rule 16 (expr)
 
 
-State 33
+State 36
 
    17 expr: expr expr '*' .
 
     $default  reduce using rule 17 (expr)
+
+
+State 37
+
+   11 unary_expression: '(' T_id "++" ')' .
+
+    $default  reduce using rule 11 (unary_expression)
+
+
+State 38
+
+   19 expr: '(' "int" expr ')' .
+
+    $default  reduce using rule 19 (expr)
+
+
+State 39
+
+   10 unary_expression: '(' "++" T_id ')' .
+
+    $default  reduce using rule 10 (unary_expression)

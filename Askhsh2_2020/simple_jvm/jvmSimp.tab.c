@@ -397,16 +397,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   35
+#define YYLAST   45
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  16
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  9
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  19
+#define YYNRULES  20
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  34
+#define YYNSTATES  40
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -454,7 +454,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    52,    52,    52,    58,    59,    60,    63,    64,    67,
-      74,    82,    88,    96,    97,    98,   102,   103,   107,   111
+      74,    82,    88,    96,    97,    98,   102,   103,   107,   111,
+     112
 };
 #endif
 
@@ -480,10 +481,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -8
+#define YYPACT_NINF -10
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-8)))
+  (!!((Yystate) == (-10)))
 
 #define YYTABLE_NINF -1
 
@@ -494,10 +495,10 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -7,     2,    23,    -8,    -8,    19,    16,    18,    25,    11,
-      11,    26,    -8,    -8,    -8,    19,    -8,    -8,    11,    20,
-      24,    -8,    11,    11,    19,    -8,     4,    -8,    -8,    -3,
-      -8,    -8,    -8,    -8
+      -4,     1,    11,   -10,   -10,    16,     4,    18,    24,    36,
+      36,    30,   -10,   -10,   -10,    16,   -10,   -10,    -1,   -10,
+     -10,    36,    36,    16,   -10,    27,    36,    28,    22,    15,
+     -10,    37,    29,    38,   -10,   -10,   -10,   -10,   -10,   -10
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -507,20 +508,20 @@ static const yytype_uint8 yydefact[] =
 {
        0,     0,     0,     2,     1,     0,     0,     0,     0,     0,
        0,     0,     8,     7,     3,     0,    13,    14,     0,    15,
-       0,    19,    10,     9,     4,     6,     0,    12,    11,     0,
-       5,    16,    17,    18
+      19,    10,     9,     4,     6,    15,     0,     0,     0,     0,
+       5,     0,     0,     0,    16,    17,    18,    12,    20,    11
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -8,    -8,    -8,     3,    -8,    -8,    -8,    -8,    12
+     -10,   -10,   -10,    -8,   -10,   -10,   -10,   -10,    -9
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     5,     7,    11,    12,    13,    21,    29
+      -1,     2,     5,     7,    11,    12,    13,    20,    29
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -528,18 +529,20 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      16,    17,    18,     1,    32,    33,    19,    16,    17,    18,
-      31,     3,    20,    19,    16,    17,    18,     8,    25,    20,
-      19,    22,    23,     4,     6,     9,    20,    30,    10,    14,
-      26,    15,    24,    28,     0,    27
+      21,    22,    16,    17,    18,     8,     1,    24,    25,    28,
+       3,     4,    26,     9,    27,    30,    10,    32,    16,    17,
+      18,     6,    35,    36,    19,    16,    17,    18,    34,    14,
+      15,    19,    16,    17,    18,    38,    23,    33,    19,    16,
+      17,    18,    31,    37,    39,    19
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-       3,     4,     5,    10,     7,     8,     9,     3,     4,     5,
-       6,     9,    15,     9,     3,     4,     5,     1,    15,    15,
-       9,     9,    10,     0,     5,     9,    15,    24,    12,    11,
-      18,     6,     6,     9,    -1,    15
+       9,    10,     3,     4,     5,     1,    10,    15,     9,    18,
+       9,     0,    13,     9,    15,    23,    12,    26,     3,     4,
+       5,     5,     7,     8,     9,     3,     4,     5,     6,    11,
+       6,     9,     3,     4,     5,     6,     6,     9,     9,     3,
+       4,     5,    15,     6,     6,     9
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -548,22 +551,24 @@ static const yytype_uint8 yystos[] =
 {
        0,    10,    17,     9,     0,    18,     5,    19,     1,     9,
       12,    20,    21,    22,    11,     6,     3,     4,     5,     9,
-      15,    23,    24,    24,     6,    19,    24,    15,     9,    24,
-      19,     6,     7,     8
+      23,    24,    24,     6,    19,     9,    13,    15,    24,    24,
+      19,    15,    24,     9,     6,     7,     8,     6,     6,     6
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    16,    18,    17,    19,    19,    19,    20,    20,    21,
-      22,    23,    23,    24,    24,    24,    24,    24,    24,    24
+      22,    23,    23,    24,    24,    24,    24,    24,    24,    24,
+      24
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     5,     3,     4,     4,     1,     1,     2,
-       2,     2,     2,     1,     1,     1,     3,     3,     3,     1
+       2,     4,     4,     1,     1,     1,     3,     3,     3,     1,
+       4
 };
 
 
@@ -1242,37 +1247,37 @@ yyreduce:
         case 2:
 #line 52 "jvmSimp.y" /* yacc.c:1646  */
     {create_preample((yyvsp[0].lexical)); symbolTable=NULL; }
-#line 1246 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1251 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 54 "jvmSimp.y" /* yacc.c:1646  */
     {fprintf(yyout,"return \n.end method\n\n");}
-#line 1252 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1257 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
 #line 58 "jvmSimp.y" /* yacc.c:1646  */
     {/* nothing */}
-#line 1258 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1263 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 59 "jvmSimp.y" /* yacc.c:1646  */
     {/* nothing */}
-#line 1264 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1269 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 63 "jvmSimp.y" /* yacc.c:1646  */
     {/* nothing */}
-#line 1270 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1275 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 64 "jvmSimp.y" /* yacc.c:1646  */
     {/* nothing */}
-#line 1276 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1281 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
@@ -1282,7 +1287,7 @@ yyreduce:
 			    fprintf(yyout,"swap\n");
 				  fprintf(yyout,"invokevirtual java/io/PrintStream/println(%s)V\n", TYPEDESCRIPTOR((yyvsp[0].se).type) ) ;
 				}
-#line 1286 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1291 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -1292,41 +1297,41 @@ yyreduce:
       typeDefinition(lookup_type((yyvsp[-1].lexical)), (yyvsp[0].se).type);
       fprintf(yyout,"%sstore %d\n",typePrefix((yyvsp[0].se).type),lookup_position((yyvsp[-1].lexical)));
     }
-#line 1296 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1301 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 82 "jvmSimp.y" /* yacc.c:1646  */
     {
-    if (!((yyval.se).type = lookup_type((yyvsp[0].lexical)))) {ERR_VAR_MISSING((yyvsp[0].lexical),yylineno);}
-    typeDefinition(type_integer,lookup_type((yyvsp[0].lexical))) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[0].lexical)));
-    fprintf(yyout,"iload %d\n",lookup_position((yyvsp[0].lexical)));
+    if (!((yyval.se).type = lookup_type((yyvsp[-1].lexical)))) {ERR_VAR_MISSING((yyvsp[-1].lexical),yylineno);}
+    typeDefinition(type_integer,lookup_type((yyvsp[-1].lexical))) ; /* check if T_id is integer */ 
+    fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[-1].lexical)));
+    fprintf(yyout,"iload %d\n",lookup_position((yyvsp[-1].lexical)));
     }
-#line 1307 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1312 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 88 "jvmSimp.y" /* yacc.c:1646  */
     { 
-     if (!((yyval.se).type = lookup_type((yyvsp[-1].lexical)))) {ERR_VAR_MISSING((yyvsp[-1].lexical),yylineno);}
-    typeDefinition(type_integer,lookup_type((yyvsp[-1].lexical))) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iload %d\n",lookup_position((yyvsp[-1].lexical)));
-    fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[-1].lexical)));
+     if (!((yyval.se).type = lookup_type((yyvsp[-2].lexical)))) {ERR_VAR_MISSING((yyvsp[-2].lexical),yylineno);}
+    typeDefinition(type_integer,lookup_type((yyvsp[-2].lexical))) ; /* check if T_id is integer */ 
+    fprintf(yyout,"iload %d\n",lookup_position((yyvsp[-2].lexical)));
+    fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[-2].lexical)));
     }
-#line 1318 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1323 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
 #line 96 "jvmSimp.y" /* yacc.c:1646  */
     {(yyval.se).type = type_integer; fprintf(yyout,"sipush %s\n",(yyvsp[0].lexical));}
-#line 1324 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1329 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
 #line 97 "jvmSimp.y" /* yacc.c:1646  */
     {(yyval.se).type = type_real; fprintf(yyout,"ldc %s\n",(yyvsp[0].lexical));}
-#line 1330 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1335 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
@@ -1335,13 +1340,13 @@ yyreduce:
       if (!((yyval.se).type = lookup_type((yyvsp[0].lexical)))) {ERR_VAR_MISSING((yyvsp[0].lexical),yylineno);}
 			fprintf(yyout,"%sload %d\n",typePrefix((yyval.se).type),lookup_position((yyvsp[0].lexical)));
     }
-#line 1339 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1344 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
 #line 102 "jvmSimp.y" /* yacc.c:1646  */
     { (yyval.se).type = (yyvsp[-1].se).type ; }
-#line 1345 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1350 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
@@ -1350,7 +1355,7 @@ yyreduce:
     (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type);
 	  fprintf(yyout,"%sadd \n",typePrefix((yyval.se).type));
     }
-#line 1354 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1359 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
@@ -1359,17 +1364,32 @@ yyreduce:
     (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type);
 	  fprintf(yyout,"%smul \n",typePrefix((yyval.se).type));
   }
-#line 1363 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1368 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
 #line 111 "jvmSimp.y" /* yacc.c:1646  */
     {(yyval.se).type = (yyvsp[0].se).type;}
-#line 1369 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1374 "jvmSimp.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 20:
+#line 112 "jvmSimp.y" /* yacc.c:1646  */
+    {
+    
+
+    if ( (yyvsp[-1].se).type == type_integer ){WRN_VAL_TYPE("int",yylineno);}
+    else if((yyvsp[-1].se).type != type_real){yyerror("Type missmatch.");}
+      
+    (yyvsp[-1].se).type = type_integer ; 
+    (yyval.se).type = (yyvsp[-1].se).type ;
+    fprintf(yyout,"%s2i\n",typePrefix((yyvsp[-1].se).type));
+  }
+#line 1389 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1373 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1393 "jvmSimp.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1597,7 +1617,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 116 "jvmSimp.y" /* yacc.c:1906  */
+#line 127 "jvmSimp.y" /* yacc.c:1906  */
 
 
 /* The usual yyerror */

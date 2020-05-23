@@ -23,7 +23,8 @@ typedef ST_ENTRY *ST_TABLE;
 #define ST_COMPARATOR(e1,e2) (strcmp(e1->varname,e2->varname))
 
 /* Error Messages Macros*/
-#define ERR_VAR_MISSING(VAR,LINE) printf("Variable %s NOT declared, n line %d.",VAR,LINE); yyerror("Variable Declation fault")
+#define ERR_VAR_MISSING(VAR,LINE) fprintf(stderr,"Variable %s NOT initialised, in line %d.",VAR,LINE); yyerror("Variable fault")
+#define WRN_VAL_TYPE(TYPE,LINE) fprintf(stderr,"Warning: value is already %s, in line %d.\n",TYPE,LINE); 
 
 /* Functions Needed*/
 
