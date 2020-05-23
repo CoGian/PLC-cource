@@ -457,8 +457,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    55,    55,    55,    61,    62,    63,    66,    67,    70,
-      77,    84,    90,    98,    99,   100,   104,   105,   109,   113,
-     114,   122,   130,   131,   132,   136,   140
+      77,    86,    94,   104,   105,   106,   110,   111,   117,   123,
+     124,   132,   140,   141,   142,   146,   150
 };
 #endif
 
@@ -1311,87 +1311,97 @@ yyreduce:
 #line 77 "jvmSimp.y" /* yacc.c:1646  */
     { 
       int garbage = addvar((yyvsp[-1].lexical), (yyvsp[0].se).type) ;  /* function addvar returns unused info:  0 if var is already in Table otherwise 1  */
-      typeDefinition(lookup_type((yyvsp[-1].lexical)), (yyvsp[0].se).type);
-      fprintf(yyout,"%sstore %d\n",typePrefix((yyvsp[0].se).type),lookup_position((yyvsp[-1].lexical)));
+      if((yyvsp[0].se).type == type_integer || (yyvsp[0].se).type == type_real){ /* check if $2 is type error */ 
+        typeDefinition(lookup_type((yyvsp[-1].lexical)), (yyvsp[0].se).type);
+        fprintf(yyout,"%sstore %d\n",typePrefix((yyvsp[0].se).type),lookup_position((yyvsp[-1].lexical)));
+      }
     }
-#line 1318 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1320 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 84 "jvmSimp.y" /* yacc.c:1646  */
+#line 86 "jvmSimp.y" /* yacc.c:1646  */
     {
     if (!((yyval.se).type = lookup_type((yyvsp[-1].lexical)))) {ERR_VAR_MISSING((yyvsp[-1].lexical),yylineno);}
-    typeDefinition(type_integer,lookup_type((yyvsp[-1].lexical))) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[-1].lexical)));
-    fprintf(yyout,"iload %d\n",lookup_position((yyvsp[-1].lexical)));
+    else {
+      typeDefinition(type_integer,lookup_type((yyvsp[-1].lexical))) ; /* check if T_id is integer */ 
+      fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[-1].lexical)));
+      fprintf(yyout,"iload %d\n",lookup_position((yyvsp[-1].lexical)));
+      }
     }
-#line 1329 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1333 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 90 "jvmSimp.y" /* yacc.c:1646  */
+#line 94 "jvmSimp.y" /* yacc.c:1646  */
     { 
      if (!((yyval.se).type = lookup_type((yyvsp[-2].lexical)))) {ERR_VAR_MISSING((yyvsp[-2].lexical),yylineno);}
-    typeDefinition(type_integer,lookup_type((yyvsp[-2].lexical))) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iload %d\n",lookup_position((yyvsp[-2].lexical)));
-    fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[-2].lexical)));
+     else { 
+      typeDefinition(type_integer,lookup_type((yyvsp[-2].lexical))) ; /* check if T_id is integer */ 
+      fprintf(yyout,"iload %d\n",lookup_position((yyvsp[-2].lexical)));
+      fprintf(yyout,"iinc %d 1\n",lookup_position((yyvsp[-2].lexical)));
+      }
     }
-#line 1340 "jvmSimp.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 13:
-#line 98 "jvmSimp.y" /* yacc.c:1646  */
-    {(yyval.se).type = type_integer; fprintf(yyout,"sipush %s\n",(yyvsp[0].lexical));}
 #line 1346 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
-  case 14:
-#line 99 "jvmSimp.y" /* yacc.c:1646  */
-    {(yyval.se).type = type_real; fprintf(yyout,"ldc %s\n",(yyvsp[0].lexical));}
+  case 13:
+#line 104 "jvmSimp.y" /* yacc.c:1646  */
+    {(yyval.se).type = type_integer; fprintf(yyout,"sipush %s\n",(yyvsp[0].lexical));}
 #line 1352 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
-  case 15:
-#line 100 "jvmSimp.y" /* yacc.c:1646  */
-    { 
-      if (!((yyval.se).type = lookup_type((yyvsp[0].lexical)))) {ERR_VAR_MISSING((yyvsp[0].lexical),yylineno);}
-			fprintf(yyout,"%sload %d\n",typePrefix((yyval.se).type),lookup_position((yyvsp[0].lexical)));
-    }
-#line 1361 "jvmSimp.tab.c" /* yacc.c:1646  */
+  case 14:
+#line 105 "jvmSimp.y" /* yacc.c:1646  */
+    {(yyval.se).type = type_real; fprintf(yyout,"ldc %s\n",(yyvsp[0].lexical));}
+#line 1358 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
-  case 16:
-#line 104 "jvmSimp.y" /* yacc.c:1646  */
-    { (yyval.se).type = (yyvsp[-1].se).type ; }
+  case 15:
+#line 106 "jvmSimp.y" /* yacc.c:1646  */
+    { 
+      if (!((yyval.se).type = lookup_type((yyvsp[0].lexical)))) {ERR_VAR_MISSING((yyvsp[0].lexical),yylineno); }
+			else if ((yyval.se).type == type_integer || (yyval.se).type == type_real) {fprintf(yyout,"%sload %d\n",typePrefix((yyval.se).type),lookup_position((yyvsp[0].lexical)));}
+    }
 #line 1367 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
+  case 16:
+#line 110 "jvmSimp.y" /* yacc.c:1646  */
+    { (yyval.se).type = (yyvsp[-1].se).type ; }
+#line 1373 "jvmSimp.tab.c" /* yacc.c:1646  */
+    break;
+
   case 17:
-#line 105 "jvmSimp.y" /* yacc.c:1646  */
+#line 111 "jvmSimp.y" /* yacc.c:1646  */
     {
-    (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type);
-	  fprintf(yyout,"%sadd \n",typePrefix((yyval.se).type));
+    if ((yyvsp[-2].se).type == type_integer || (yyvsp[-2].se).type == type_real && (yyvsp[-1].se).type == type_integer || (yyvsp[-1].se).type == type_real) { /* check if a value is type error */ 
+      (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type);
+      fprintf(yyout,"%sadd \n",typePrefix((yyval.se).type));
+      }
     }
-#line 1376 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1384 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 109 "jvmSimp.y" /* yacc.c:1646  */
+#line 117 "jvmSimp.y" /* yacc.c:1646  */
     {
-    (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type);
-	  fprintf(yyout,"%smul \n",typePrefix((yyval.se).type));
+    if ((yyvsp[-2].se).type == type_integer || (yyvsp[-2].se).type == type_real && (yyvsp[-1].se).type == type_integer || (yyvsp[-1].se).type == type_real) { /* check if a value is type error */ 
+      (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type);
+	    fprintf(yyout,"%smul \n",typePrefix((yyval.se).type));
+    }
   }
-#line 1385 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1395 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 113 "jvmSimp.y" /* yacc.c:1646  */
+#line 123 "jvmSimp.y" /* yacc.c:1646  */
     {(yyval.se).type = (yyvsp[0].se).type;}
-#line 1391 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1401 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 114 "jvmSimp.y" /* yacc.c:1646  */
+#line 124 "jvmSimp.y" /* yacc.c:1646  */
     {
     if ( (yyvsp[-1].se).type == type_integer ){(yyval.se).type = (yyvsp[-1].se).type;WRN_VAL_TYPE("int",yylineno);} /*check for warning */ 
     else if((yyvsp[-1].se).type == type_real){
@@ -1400,11 +1410,11 @@ yyreduce:
       fprintf(yyout,"%s2i\n",typePrefix(type_real));
     }else  {yyerror("Type missmatch.");}
   }
-#line 1404 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1414 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 122 "jvmSimp.y" /* yacc.c:1646  */
+#line 132 "jvmSimp.y" /* yacc.c:1646  */
     {
     if ( (yyvsp[-1].se).type == type_real ){(yyval.se).type = (yyvsp[-1].se).type;WRN_VAL_TYPE("real",yylineno);} /*check for warning */ 
     else if((yyvsp[-1].se).type == type_integer){
@@ -1413,50 +1423,50 @@ yyreduce:
       fprintf(yyout,"%s2f\n",typePrefix(type_integer));
     }else {yyerror("Type missmatch.");}     
   }
-#line 1417 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1427 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 130 "jvmSimp.y" /* yacc.c:1646  */
+#line 140 "jvmSimp.y" /* yacc.c:1646  */
     { (yyval.se).type = type_integer; fprintf(yyout,"sipush -%s\n",(yyvsp[0].lexical));/* rule for negative integers */}
-#line 1423 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1433 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 131 "jvmSimp.y" /* yacc.c:1646  */
+#line 141 "jvmSimp.y" /* yacc.c:1646  */
     {(yyval.se).type = type_real; fprintf(yyout,"ldc -%s\n",(yyvsp[0].lexical)); /* rule for negative reals */}
-#line 1429 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1439 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 132 "jvmSimp.y" /* yacc.c:1646  */
+#line 142 "jvmSimp.y" /* yacc.c:1646  */
     {
     (yyval.se).type = (yyvsp[-1].se).type; 
     fprintf(yyout,"invokestatic java/lang/Math/abs(%s)%s\n", TYPEDESCRIPTOR((yyvsp[-1].se).type),TYPEDESCRIPTOR((yyvsp[-1].se).type)) ;
   }
-#line 1438 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1448 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 136 "jvmSimp.y" /* yacc.c:1646  */
+#line 146 "jvmSimp.y" /* yacc.c:1646  */
     { 
     (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type);
     fprintf(yyout,"invokestatic java/lang/Math/max(%s%s)%s\n", TYPEDESCRIPTOR((yyvsp[-2].se).type),TYPEDESCRIPTOR((yyvsp[-1].se).type),TYPEDESCRIPTOR((yyval.se).type)) ;
   }
-#line 1447 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1457 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 140 "jvmSimp.y" /* yacc.c:1646  */
+#line 150 "jvmSimp.y" /* yacc.c:1646  */
     { 
     (yyval.se).type = typeDefinition((yyvsp[-2].se).type, (yyvsp[-1].se).type); 
     fprintf(yyout,"invokestatic java/lang/Math/min(%s%s)%s\n", TYPEDESCRIPTOR((yyvsp[-2].se).type),TYPEDESCRIPTOR((yyvsp[-1].se).type),TYPEDESCRIPTOR((yyval.se).type)) ;
   }
-#line 1456 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1466 "jvmSimp.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1460 "jvmSimp.tab.c" /* yacc.c:1646  */
+#line 1470 "jvmSimp.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1684,7 +1694,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 149 "jvmSimp.y" /* yacc.c:1906  */
+#line 159 "jvmSimp.y" /* yacc.c:1906  */
 
 
 /* The usual yyerror */

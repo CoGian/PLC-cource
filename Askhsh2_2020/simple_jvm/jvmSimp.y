@@ -76,39 +76,49 @@ printcmd: "print"  expr   {
 
 asmt: T_id expr{ 
       int garbage = addvar($1, $2.type) ;  /* function addvar returns unused info:  0 if var is already in Table otherwise 1  */
-      typeDefinition(lookup_type($1), $2.type);
-      fprintf(yyout,"%sstore %d\n",typePrefix($2.type),lookup_position($1));
+      if($2.type == type_integer || $2.type == type_real){ /* check if $2 is type error */ 
+        typeDefinition(lookup_type($1), $2.type);
+        fprintf(yyout,"%sstore %d\n",typePrefix($2.type),lookup_position($1));
+      }
     }
 	  ;
 
 unary_expression : '(' T_incr T_id ')'{
     if (!($$.type = lookup_type($3))) {ERR_VAR_MISSING($3,yylineno);}
-    typeDefinition(type_integer,lookup_type($3)) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iinc %d 1\n",lookup_position($3));
-    fprintf(yyout,"iload %d\n",lookup_position($3));
+    else {
+      typeDefinition(type_integer,lookup_type($3)) ; /* check if T_id is integer */ 
+      fprintf(yyout,"iinc %d 1\n",lookup_position($3));
+      fprintf(yyout,"iload %d\n",lookup_position($3));
+      }
     }
   | '(' T_id T_incr ')'{ 
      if (!($$.type = lookup_type($2))) {ERR_VAR_MISSING($2,yylineno);}
-    typeDefinition(type_integer,lookup_type($2)) ; /* check if T_id is integer */ 
-    fprintf(yyout,"iload %d\n",lookup_position($2));
-    fprintf(yyout,"iinc %d 1\n",lookup_position($2));
+     else { 
+      typeDefinition(type_integer,lookup_type($2)) ; /* check if T_id is integer */ 
+      fprintf(yyout,"iload %d\n",lookup_position($2));
+      fprintf(yyout,"iinc %d 1\n",lookup_position($2));
+      }
     }
 	;
 
 expr:   T_num  {$$.type = type_integer; fprintf(yyout,"sipush %s\n",$1);}
 	| T_real 	  {$$.type = type_real; fprintf(yyout,"ldc %s\n",$1);}
 	| T_id 	 { 
-      if (!($$.type = lookup_type($1))) {ERR_VAR_MISSING($1,yylineno);}
-			fprintf(yyout,"%sload %d\n",typePrefix($$.type),lookup_position($1));
+      if (!($$.type = lookup_type($1))) {ERR_VAR_MISSING($1,yylineno); }
+			else if ($$.type == type_integer || $$.type == type_real) {fprintf(yyout,"%sload %d\n",typePrefix($$.type),lookup_position($1));}
     }
   | '(' expr ')' { $$.type = $2.type ; }
   | expr expr '+' {
-    $$.type = typeDefinition($1.type, $2.type);
-	  fprintf(yyout,"%sadd \n",typePrefix($$.type));
+    if ($1.type == type_integer || $1.type == type_real && $2.type == type_integer || $2.type == type_real) { /* check if a value is type error */ 
+      $$.type = typeDefinition($1.type, $2.type);
+      fprintf(yyout,"%sadd \n",typePrefix($$.type));
+      }
     }
   | expr expr '*'{
-    $$.type = typeDefinition($1.type, $2.type);
-	  fprintf(yyout,"%smul \n",typePrefix($$.type));
+    if ($1.type == type_integer || $1.type == type_real && $2.type == type_integer || $2.type == type_real) { /* check if a value is type error */ 
+      $$.type = typeDefinition($1.type, $2.type);
+	    fprintf(yyout,"%smul \n",typePrefix($$.type));
+    }
   }
   | unary_expression {$$.type = $1.type;}
   | '(' T_type_integer expr ')' {
