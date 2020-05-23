@@ -45,6 +45,8 @@ int yyerror(const char *);
 %token '*'
 %token T_incr "++"
 %token T_abs "abs"
+%token T_max "max"
+%token T_min "min"
 %token '-'
 %type<se> expr
 %type<se> unary_expression
@@ -130,6 +132,14 @@ expr:   T_num  {$$.type = type_integer; fprintf(yyout,"sipush %s\n",$1);}
   | expr T_abs {
     $$.type = $1.type; 
     fprintf(yyout,"invokestatic java/lang/Math/abs(%s)%s\n", TYPEDESCRIPTOR($1.type),TYPEDESCRIPTOR($1.type)) ;
+  }
+  | expr expr T_max { 
+    $$.type = typeDefinition($1.type, $2.type);
+    fprintf(yyout,"invokestatic java/lang/Math/max(%s%s)%s\n", TYPEDESCRIPTOR($1.type),TYPEDESCRIPTOR($2.type),TYPEDESCRIPTOR($$.type)) ;
+  }
+  | expr expr T_min { 
+    $$.type = typeDefinition($1.type, $2.type); 
+    fprintf(yyout,"invokestatic java/lang/Math/min(%s%s)%s\n", TYPEDESCRIPTOR($1.type),TYPEDESCRIPTOR($2.type),TYPEDESCRIPTOR($$.type)) ;
   }
   ;
 

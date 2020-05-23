@@ -31,7 +31,8 @@ newline \n|\x0A|\x0D\x0A
 
 "++" {return T_incr;}
 "abs" {return T_abs;}
-
+"max" {return T_max;}
+"min" {return T_min;}
 {D}+ {yylval.lexical = strdup(yytext);  return T_num;}
 {FLOAT} {yylval.lexical = strdup(yytext); return T_real;}
 {VARIABLE} {yylval.lexical = strdup(yytext); return T_id;}
